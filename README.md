@@ -318,5 +318,3 @@ xpskill 参考了通用数字分身项目的思路，但把重点收窄到“聊
 
 - [agenmod/immortal-skill](https://github.com/agenmod/immortal-skill)：提供通用数字分身、角色模板、分维度蒸馏和证据意识等思路。xpskill 在此基础上结合 xinpai-bot 的设备工作流做了轻量化实现。
 - [shuakami/qq-chat-exporter](https://github.com/shuakami/qq-chat-exporter)：提供 QQ 聊天记录 JSON 导出能力。xpskill 使用其导出的结构化数据进行解析和蒸馏。
-
-本项目不包含上述项目的代码；具体许可证和使用方式请以各自原项目为准。
