@@ -361,7 +361,8 @@ def parse_json_log(path: Path) -> list[Msg]:
 
 def parse_twitter_js(path: Path) -> list[Msg]:
     text = path.read_text(encoding="utf-8", errors="ignore")
-    text = re.sub(r"^(?:window\.\w+\.\w+|\w+)\s*=\s*", "", text, count=1)
+    # 归档文件形如 `window.YTD.tweets.part0 = [...]`，赋值左侧可能是带点的长路径
+    text = re.sub(r"^(?:window\.)?[\w.]+\s*=\s*", "", text.strip(), count=1)
     try:
         data = json.loads(text)
     except json.JSONDecodeError:
@@ -491,12 +492,20 @@ def read_text_any(path: Path) -> str | None:
     return None
 
 
+def _looks_like_whatsapp(text: str) -> bool:
+    """首行是 WhatsApp 头部、且至少命中两行，才认为它是 WhatsApp 导出。"""
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if len(lines) < 2 or not WHATSAPP_HEAD.match(lines[0]):
+        return False
+    return sum(1 for line in lines if WHATSAPP_HEAD.match(line)) >= 2
+
+
 def load_messages(path: Path, channel: str | None = None) -> list[Msg]:
     if path.is_dir():
         msgs: list[Msg] = []
         for child in sorted(path.rglob("*")):
             if child.is_file() and child.suffix.lower() in (
-                    ".txt", ".csv", ".json", ".mht", ".html", ".htm"):
+                    ".txt", ".csv", ".json", ".mht", ".html", ".htm", ".js", ".mbox"):
                 msgs.extend(load_messages(child, channel=channel))
         return msgs
 
@@ -507,6 +516,10 @@ def load_messages(path: Path, channel: str | None = None) -> list[Msg]:
         return parse_csv(path)
     if suffix == ".json":
         return parse_json_log(path)
+    if suffix == ".js":
+        return parse_twitter_js(path)
+    if suffix == ".mbox":
+        return parse_mbox(path)
 
     text = read_text_any(path)
     if text is None:
@@ -520,6 +533,8 @@ def load_messages(path: Path, channel: str | None = None) -> list[Msg]:
     # 只有确实解析出说话人，才认为这是 QQ 导出格式；否则说明是别的排版
     if len(qq) >= 5 and any(m.speaker != "未知" for m in qq):
         return qq
+    if _looks_like_whatsapp(text):
+        return parse_whatsapp_txt(text)
     return parse_generic_txt(text)
 
 

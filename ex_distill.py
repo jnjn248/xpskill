@@ -7,11 +7,11 @@ import sys
 from pathlib import Path
 
 
-SRC_DIR = Path(__file__).resolve().parent / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+BASE_DIR = Path(__file__).resolve().parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
-from xpskill.cli import main
+from src.cli import main
 
 
 if __name__ == "__main__":

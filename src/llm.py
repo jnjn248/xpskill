@@ -5,6 +5,8 @@ import urllib.error
 import urllib.request
 from collections import defaultdict
 
+from .models import Stats
+
 
 PERSONA_PROMPT = """你在做「人格蒸馏」：从一段真实聊天记录里，还原 TA 这个人说话和行为的样子。
 只输出 JSON，不要任何解释。字段要求：
@@ -36,8 +38,23 @@ MEMORY_PROMPT = """你在整理「关系记忆档案」：把聊天记录里的�
 只写聊天记录里真实出现的，不要脑补；没有的就给空数组。"""
 
 
+def _require_ascii(value: str, label: str) -> str:
+    """URL 与 HTTP 头值只能是 ASCII；非 ASCII 时 urllib 只报难懂的 latin-1 错误。"""
+    if "\n" in value or "\r" in value:
+        raise RuntimeError(f"{label} 含换行符，请检查是否从文件粘贴时带了多余空白。")
+    if not value.isascii():
+        bad = "".join(dict.fromkeys(ch for ch in value if not ch.isascii()))
+        raise RuntimeError(
+            f"{label} 含非 ASCII 字符 {bad!r}；URL 和请求头只能用 ASCII 编码，"
+            "请检查是否把占位符或中文误当成了 API Key / 接口地址。"
+        )
+    return value
+
+
 def llm_call(base_url: str, api_key: str, model: str, system: str, user: str,
              timeout: int = 180, dry_run: bool = False) -> str:
+    base_url = _require_ascii(base_url, "接口地址（--base-url）")
+    api_key = _require_ascii(api_key, "API Key（--api-key / 环境变量）")
     url = base_url.rstrip("/") + "/chat/completions"
     payload = {
         "model": model,

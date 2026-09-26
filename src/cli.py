@@ -18,7 +18,8 @@ def build_args(argv=None):
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="输出：<out>/<name>/SKILL.md + references/memory.md，以及 <out>/<name>.zip",
     )
-    p.add_argument("--input", required=True, help="聊天记录文件或目录（txt/csv/json）")
+    p.add_argument("--input", required=True,
+                   help="聊天记录文件或目录（txt/csv/json/html/mht/mbox/js/db）")
     p.add_argument("--name", required=True, help="技能目录名（字母数字下划线短横线点）")
     p.add_argument("--display", help="显示名（默认与 --name 相同）")
     p.add_argument("--me", default="我",
@@ -27,8 +28,8 @@ def build_args(argv=None):
     p.add_argument("--target", help="要蒸馏的对象昵称（默认自动判断：除 --me 之外说话最多的人）")
     p.add_argument("--channel", help="微信 SQLite 数据库中的 StrTalker，会话对象（仅 --input 为 .db 时使用）")
     p.add_argument("--desc", default="", help="主观描述：性格/MBTI/星座/标签，例如『ENFP，双子座，话痨』")
-    p.add_argument("--out", default="/home/jn/Echo-Mate/tools/dist",
-                   help="输出目录（默认 /home/jn/Echo-Mate/tools/dist）")
+    p.add_argument("--out", default=str(Path(__file__).resolve().parent.parent / "dist"),
+                   help="输出目录（默认 <工具目录>/dist，建议显式指定；不要依赖系统盘根目录等绝对路径）")
     p.add_argument("--llm-chars", type=int, default=30000, help="送给 LLM 的语料字符预算（默认 30000）")
     p.add_argument("--llm-batches", type=int, default=3, help="最多分几批分析（默认 3）")
     p.add_argument("--base-url", default=os.environ.get("LLM_BASE_URL", "https://api-inference.modelscope.cn/v1"),

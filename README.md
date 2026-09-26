@@ -37,8 +37,9 @@
 运行时只需要 Python 3.9+ 标准库，不需要 `pip install` 或第三方依赖。
 
 ```bash
-cd /home/jn/xinpai-bot/tools/xpskill
+cd /home/jn/xinpai-bot/xpskill
 python3 -m py_compile ex_distill.py
+python3 ex_distill.py --help   # 确认整个包可以导入
 ```
 
 ## 快速开始
@@ -97,10 +98,12 @@ python3 ex_distill.py \
 | --- | --- | --- |
 | JSON | `--input chat.json` | 查找 `messages`、`list`、`items`、`posts`、`comments`、`statuses` 或 `data` 消息数组。 |
 | CSV | `--input chat.csv` | 自动识别时间、发送者、正文和 `IsSender` 等常见列名。 |
-| TXT | `--input chat.txt` | 支持 `昵称: 内容`、带时间的消息行和 QQ 导出文本。 |
+| TXT | `--input chat.txt` | 支持 `昵称: 内容`、带时间的消息行、QQ 导出文本，以及 WhatsApp 导出片段。 |
 | HTML/MHT | `--input chat.html` | 先提取纯文本，再按聊天消息格式解析。 |
 | 微信 SQLite | `--input EnMicroMsg.db` | 读取已解密数据库的 `MSG` 表；可用 `--channel` 过滤 `StrTalker`。 |
-| 目录 | `--input exports/` | 递归读取 `.txt`、`.csv`、`.json`、`.html`、`.htm`、`.mht` 文件。 |
+| Twitter/X | `--input tweets.js` | 解析 X/Twitter 归档里的 `tweets.js`、`direct-messages.js`。 |
+| mbox | `--input archive.mbox` | 读取本地邮箱归档，取文本正文、发件人和日期。 |
+| 目录 | `--input exports/` | 递归读取 `.txt`、`.csv`、`.json`、`.js`、`.mbox`、`.html`、`.htm`、`.mht` 文件。 |
 
 JSON 消息正文支持 `text`、`content`、`message`、`body` 等字段，发送者支持 `name`、`remark`、`nickname`、`uin` 等字段。
 
@@ -115,7 +118,7 @@ JSON 消息正文支持 `text`、`content`、`message`、`body` 等字段，发�
 | `--target` | 自动判断 | 要蒸馏的对象；省略时选择消息最多的非本人说话者。 |
 | `--channel` | 无 | 微信 SQLite 的 `StrTalker` 会话名。 |
 | `--desc` | 空 | 对关系、性格或背景的补充描述。 |
-| `--out` | `/home/jn/xinpai-bot/tools/dist` | 输出目录，建议显式指定。 |
+| `--out` | `<工具目录>/dist` | 输出目录，跨平台安全；建议显式指定，避免依赖系统盘根目录等绝对路径。 |
 | `--llm-chars` | `30000` | LLM 样本字符预算。 |
 | `--llm-batches` | `3` | 最多分析批次数。 |
 | `--base-url` | ModelScope 兼容地址 | OpenAI 兼容接口根地址。 |
@@ -186,20 +189,20 @@ python3 -m py_compile ex_distill.py
 python3 ex_distill.py --help
 ```
 
-使用本地样本做完整统计流程时，请显式使用占位输出目录：
+使用本地样本做完整统计流程时，请显式指定占位输出目录（不要依赖默认值）：
 
 ```bash
 python3 ex_distill.py \
   --input /path/to/chat.json \
   --me '你的昵称' \
   --name smoke-test \
-  --out /tmp/xpskill-test \
+  --out ./dist-smoke \
   --no-llm
 
-unzip -l /tmp/xpskill-test/smoke-test.zip
+unzip -l ./dist-smoke/smoke-test.zip
 ```
 
-项目当前未检测到独立测试套件；上述命令覆盖语法、参数解析和无 LLM 打包路径。
+项目当前未检测到独立测试套件；上述命令覆盖语法、导入、参数解析和无 LLM 打包路径。
 
 ## 贡献
 

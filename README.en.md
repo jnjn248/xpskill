@@ -37,8 +37,9 @@ A chat-persona Skill package generator that distills chat history from sources s
 The runtime is Python 3.9+ with the standard library only. No `pip install` or third-party dependencies are required.
 
 ```bash
-cd /home/jn/xinpai-bot/tools/xpskill
+cd /home/jn/xinpai-bot/xpskill
 python3 -m py_compile ex_distill.py
+python3 ex_distill.py --help   # confirms the whole package imports
 ```
 
 ## Quick Start
@@ -97,10 +98,12 @@ python3 ex_distill.py \
 | --- | --- | --- |
 | JSON | `--input chat.json` | Looks for message arrays under `messages`, `list`, `items`, `posts`, `comments`, `statuses`, or `data`. |
 | CSV | `--input chat.csv` | Detects common time, sender, body, and `IsSender` columns. |
-| TXT | `--input chat.txt` | Supports `name: message`, timestamped lines, and QQ export text. |
+| TXT | `--input chat.txt` | Supports `name: message`, timestamped lines, QQ export text, and WhatsApp export chunks. |
 | HTML/MHT | `--input chat.html` | Extracts plain text before applying chat parsers. |
 | WeChat SQLite | `--input EnMicroMsg.db` | Reads the decrypted `MSG` table; use `--channel` to filter `StrTalker`. |
-| Directory | `--input exports/` | Recursively reads `.txt`, `.csv`, `.json`, `.html`, `.htm`, and `.mht` files. |
+| Twitter/X | `--input tweets.js` | Parses `tweets.js` and `direct-messages.js` from X/Twitter archives. |
+| mbox | `--input archive.mbox` | Reads local mailbox archives and extracts text body, sender, and date. |
+| Directory | `--input exports/` | Recursively reads `.txt`, `.csv`, `.json`, `.js`, `.mbox`, `.html`, `.htm`, and `.mht` files. |
 
 JSON bodies can use fields such as `text`, `content`, `message`, or `body`; sender objects can use `name`, `remark`, `nickname`, or `uin`.
 
@@ -115,7 +118,7 @@ JSON bodies can use fields such as `text`, `content`, `message`, or `body`; send
 | `--target` | auto-detected | Person to distill; omitted selects the most frequent non-self speaker. |
 | `--channel` | none | WeChat SQLite `StrTalker` session name. |
 | `--desc` | empty | Additional relationship, personality, or background context. |
-| `--out` | `/home/jn/xinpai-bot/tools/dist` | Output directory; explicit paths are recommended. |
+| `--out` | `<tool-dir>/dist` | Output directory; portable by default, but an explicit path is recommended over absolute system-drive paths. |
 | `--llm-chars` | `30000` | Character budget for LLM samples. |
 | `--llm-batches` | `3` | Maximum number of analysis batches. |
 | `--base-url` | ModelScope-compatible URL | OpenAI-compatible API root. |
@@ -186,20 +189,20 @@ python3 -m py_compile ex_distill.py
 python3 ex_distill.py --help
 ```
 
-For a complete local smoke test, use synthetic or redacted data and an explicit temporary output directory:
+For a complete local smoke test, use synthetic or redacted data and an explicit output directory:
 
 ```bash
 python3 ex_distill.py \
   --input /path/to/chat.json \
   --me 'your name' \
   --name smoke-test \
-  --out /tmp/xpskill-test \
+  --out ./dist-smoke \
   --no-llm
 
-unzip -l /tmp/xpskill-test/smoke-test.zip
+unzip -l ./dist-smoke/smoke-test.zip
 ```
 
-No separate test suite was detected; these commands cover syntax, argument parsing, and the no-LLM packaging path.
+No separate test suite was detected; these commands cover syntax, imports, argument parsing, and the no-LLM packaging path.
 
 ## Contributing
 
