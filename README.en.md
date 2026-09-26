@@ -37,7 +37,7 @@ A chat-persona Skill package generator that distills chat history from sources s
 The runtime is Python 3.9+ with the standard library only. No `pip install` or third-party dependencies are required.
 
 ```bash
-cd /home/jn/Echo-Mate/tools/xpskill
+cd /home/jn/xinpai-bot/tools/xpskill
 python3 -m py_compile ex_distill.py
 ```
 
@@ -115,7 +115,7 @@ JSON bodies can use fields such as `text`, `content`, `message`, or `body`; send
 | `--target` | auto-detected | Person to distill; omitted selects the most frequent non-self speaker. |
 | `--channel` | none | WeChat SQLite `StrTalker` session name. |
 | `--desc` | empty | Additional relationship, personality, or background context. |
-| `--out` | `/home/jn/Echo-Mate/tools/dist` | Output directory; explicit paths are recommended. |
+| `--out` | `/home/jn/xinpai-bot/tools/dist` | Output directory; explicit paths are recommended. |
 | `--llm-chars` | `30000` | Character budget for LLM samples. |
 | `--llm-batches` | `3` | Maximum number of analysis batches. |
 | `--base-url` | ModelScope-compatible URL | OpenAI-compatible API root. |

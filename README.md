@@ -37,7 +37,7 @@
 运行时只需要 Python 3.9+ 标准库，不需要 `pip install` 或第三方依赖。
 
 ```bash
-cd /home/jn/Echo-Mate/tools/xpskill
+cd /home/jn/xinpai-bot/tools/xpskill
 python3 -m py_compile ex_distill.py
 ```
 
@@ -115,7 +115,7 @@ JSON 消息正文支持 `text`、`content`、`message`、`body` 等字段，发�
 | `--target` | 自动判断 | 要蒸馏的对象；省略时选择消息最多的非本人说话者。 |
 | `--channel` | 无 | 微信 SQLite 的 `StrTalker` 会话名。 |
 | `--desc` | 空 | 对关系、性格或背景的补充描述。 |
-| `--out` | `/home/jn/Echo-Mate/tools/dist` | 输出目录，建议显式指定。 |
+| `--out` | `/home/jn/xinpai-bot/tools/dist` | 输出目录，建议显式指定。 |
 | `--llm-chars` | `30000` | LLM 样本字符预算。 |
 | `--llm-batches` | `3` | 最多分析批次数。 |
 | `--base-url` | ModelScope 兼容地址 | OpenAI 兼容接口根地址。 |
