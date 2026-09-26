@@ -1,0 +1,8 @@
+# VSCode 配置
+.vscode/
+
+# Python 缓存
+__pycache__/
+
+# JSON 文件
+*.json
