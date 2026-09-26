@@ -2,7 +2,7 @@
 
 <div align="center"><img alt="Tests" src="https://img.shields.io/badge/tests-not_configured-lightgrey.svg"><img alt="License" src="https://img.shields.io/badge/license-MIT-green.svg"><img alt="Version" src="https://img.shields.io/badge/version-unreleased-lightgrey.svg"><img alt="Language" src="https://img.shields.io/badge/language-Python-3776AB.svg"></div>
 
-<p align="center">🇺🇸 <a href="./README.en.md">English</a> | 🇨🇳 <a href="./README.zh.md">简体中文</a></p>
+<p align="center">🇺🇸 <a href="./README.en.md">English</a> | 🇨🇳 <a href="./README.md">简体中文</a></p>
 
 A chat-persona Skill package generator that distills chat history from sources such as QQ into lightweight, portable `SKILL.md` files, relationship-memory files, and `.zip` packages. The generated packages can be used with tools that support the Skill format or similar skill-package mechanisms, with xinpai-bot as the current primary target (project coming soon).
 
